@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <title>Password Checker</title>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Login</h1>
+    <form method="POST">
+      <input type="text" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Enter password" required />
+      <button type="submit">Submit</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+      <!--<h3>Results for: {{ result.password }}</h3> (For testing)--> 
+      {% if result.is_pwned %}
+        <p style="color: red;">⚠️ This password has appeared in {{ result.count }} data breaches!</p>
+      {% else %}
+        <p style="color: green;">✅ This password hasn't been found in any known breaches</p>
+      {% endif %}
+
+      <p>{{ result.length}}</p>
+      <p>{{ result.complexity}}</p>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>
