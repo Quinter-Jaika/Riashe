@@ -394,7 +394,7 @@ h1 {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     text-align: center;
     border: 1px solid var(--daria-accent);
-    margin: 50px auto;
+    margin: 40px auto;
 }
 
 .register-form h2 {
@@ -418,7 +418,7 @@ h1 {
 }
 
 .register-form input {
-    width: 100%;
+    width: 90%;
     padding: 12px 12px 12px 40px;
     margin: 5px 0;
     border: 2px solid var(--daria-accent);
