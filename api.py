@@ -137,6 +137,22 @@ def dashboard():
         has_digit=has_digit,
         has_special=has_special
     )
+@app.route('/logout')
+def logout():
+    return render_template('logout.html')
+
+@app.route('/reset', methods=['GET', 'POST'])
+def reset_password():
+    if request.method == 'POST':
+        # Handle password reset logic here
+        current_password = request.form['current-password']
+        new_password = request.form['new-password']
+        confirm_password = request.form['confirm-password']
+        
+        # Add your password validation and update logic
+        return redirect(url_for('dashboard'))
+    
+    return render_template('reset.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

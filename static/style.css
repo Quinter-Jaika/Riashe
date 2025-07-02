@@ -1,16 +1,16 @@
-/* Daria & Shego Inspired Theme */
+/* Pastel Daria & Shego Inspired Theme */
 :root {
-  /* Daria Colors */
-  --daria-green: #2a4a3c;
-  --daria-dark: #1a1a1a;
-  --daria-light: #e0e0e0;
-  --daria-accent: #b76eb8; /* Purple-pink */
+  /* Pastel Daria Colors */
+  --daria-green: #b8d5cd; /* Pastel version of #2a4a3c */
+  --daria-dark: #e0e0e0;  /* Pastel version of #1a1a1a */
+  --daria-light: #2a2a2a; /* Inverted for readability */
+  --daria-accent: #f75cf7c9; /* Pastel purple-pink */
   
-  /* Shego Colors */
-  --shego-black: #000000;
-  --shego-green: #00ff00;
-  --shego-dark-green: #006400;
-  --shego-accent: #ff1493; /* Deep pink */
+  /* Pastel Shego Colors */
+  --shego-black: #4a4a4a; /* Softened black */
+  --shego-green: #76ff76; /* Pastel green */
+  --shego-dark-green: #60b160; /* Pastel dark green */
+  --shego-accent: #ec6bbec8; /* Pastel deep pink */
 }
 
 /* Base Styles */
@@ -22,7 +22,7 @@ body {
   color: var(--daria-light);
 }
 
-/* Background Pattern */
+/* Background Pattern - made more subtle */
 body::before {
   content: "";
   position: fixed;
@@ -53,15 +53,15 @@ body::before {
     );
   background-size: 100px 100px;
   background-color: var(--daria-dark);
-  opacity: 0.3;
+  opacity: 0.2; /* More subtle */
   z-index: -1;
 }
 
-/* Navigation - Shego Inspired */
+/* Navigation - Pastel Shego Inspired */
 nav {
   background-color: var(--shego-black);
   padding: 15px 0;
-  box-shadow: 0 2px 10px var(--shego-green);
+  box-shadow: 0 2px 10px rgba(160, 255, 160, 0.3); /* Pastel shadow */
   border-bottom: 1px solid var(--shego-green);
 }
 
@@ -80,7 +80,7 @@ nav {
   color: var(--shego-green);
   text-decoration: none;
   font-family: 'Courier New', monospace;
-  text-shadow: 0 0 5px var(--shego-green);
+  text-shadow: 0 0 5px rgba(160, 255, 160, 0.5); /* Softer glow */
 }
 
 .nav-links {
@@ -89,7 +89,7 @@ nav {
 }
 
 .nav-links a {
-  color: var(--daria-light);
+  color: white;
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s;
@@ -99,17 +99,17 @@ nav {
 
 .nav-links a:hover {
   color: var(--shego-green);
-  background-color: rgba(0, 255, 0, 0.1);
-  text-shadow: 0 0 5px var(--shego-green);
+  background-color: rgba(160, 255, 160, 0.2); /* Pastel hover */
+  text-shadow: 0 0 5px rgba(160, 255, 160, 0.3);
 }
 
-/* Login Page - Daria Inspired */
+/* Login Page - Pastel Daria Inspired */
 .login-container {
   width: 400px;
   padding: 40px;
   background-color: var(--daria-green);
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Lighter shadow */
   text-align: center;
   border: 1px solid var(--daria-accent);
   margin: 50px auto;
@@ -126,7 +126,7 @@ nav {
   margin: 10px 0;
   border: 2px solid var(--daria-accent);
   border-radius: 5px;
-  background-color: var(--daria-dark);
+  background-color: white;
   color: var(--daria-light);
   font-family: 'Courier New', monospace;
 }
@@ -134,12 +134,12 @@ nav {
 .login-form input:focus {
   outline: none;
   border-color: var(--shego-green);
-  box-shadow: 0 0 10px var(--shego-green);
+  box-shadow: 0 0 10px rgba(160, 255, 160, 0.3);
 }
 
 .login-form button {
   background-color: var(--daria-accent);
-  color: var(--daria-dark);
+  color: var(--shego-black);
   padding: 12px;
   width: 100%;
   border: none;
@@ -154,33 +154,35 @@ nav {
 .login-form button:hover {
   background-color: var(--shego-green);
   color: var(--shego-black);
-  box-shadow: 0 0 10px var(--shego-green);
+  box-shadow: 0 0 10px rgba(160, 255, 160, 0.3);
 }
 
-/* Dashboard - Shego Tech Inspired */
+/* Dashboard - Pastel Shego Tech Inspired */
 .dashboard {
   max-width: 800px;
   margin: 30px auto;
   padding: 30px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   border: 1px solid var(--shego-green);
-  box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+  box-shadow: 0 0 20px rgba(160, 255, 160, 0.1);
 }
 
 .score-card {
   background: linear-gradient(135deg, var(--daria-green) 0%, var(--shego-black) 100%);
   padding: 20px;
+  font-weight: bold;
   border-radius: 10px;
   margin-bottom: 30px;
   border: 1px solid var(--shego-green);
+  text-shadow: 0 0 10px rgba(160, 255, 160, 0.3);
 }
 
 .score-value {
   font-size: 72px;
   font-weight: bold;
   color: var(--shego-green);
-  text-shadow: 0 0 10px var(--shego-green);
+  text-shadow: 0 0 10px rgba(160, 255, 160, 0.3);
 }
 
 .metrics {
@@ -191,22 +193,23 @@ nav {
 }
 
 .metric-card {
-  background-color: rgba(42, 74, 60, 0.5); /* daria-green */
+  background-color: rgba(184, 213, 205, 0.7); /* pastel daria-green */
   padding: 15px;
   border-radius: 8px;
   border: 1px solid var(--daria-accent);
 }
 
 .metric-card h3 {
-  color: var(--shego-green);
+  color: #006400; /* Dark green */
   border-bottom: 1px solid var(--daria-accent);
   padding-bottom: 5px;
+  font-weight: bold;
 }
 
 /* Progress Bars */
 .progress-bar {
   height: 10px;
-  background-color: var(--daria-dark);
+  background-color: #e0e0e0;
   border-radius: 5px;
   margin: 10px 0;
   overflow: hidden;
@@ -214,11 +217,11 @@ nav {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--daria-accent), var(--shego-green));
+  background: linear-gradient(90deg, #b76eb8, #006400);
   transition: width 0.5s ease;
 }
 
-/* Home Page - Daria's World */
+/* Home Page - Pastel Daria's World */
 .content {
   padding: 40px;
   max-width: 1200px;
@@ -233,16 +236,18 @@ h1 {
 }
 
 .lore-section {
-  background-color: rgba(42, 74, 60, 0.7); /* daria-green */
+  background-color: rgba(184, 213, 205, 0.7); /* pastel daria-green */
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 30px;
   border: 1px solid var(--daria-accent);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .lore-section h2 {
-  color: var(--shego-green);
+  color: #006400; /* Dark green */
+  font-weight: bold;
+  margin-bottom: 15px;
 }
 
 .lore-section ul {
@@ -257,7 +262,7 @@ h1 {
 /* Buttons */
 .btn-primary {
   background-color: var(--daria-accent);
-  color: var(--daria-dark);
+  color: var(--shego-black);
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -272,7 +277,7 @@ h1 {
 .btn-primary:hover {
   background-color: var(--shego-green);
   color: var(--shego-black);
-  box-shadow: 0 0 10px var(--shego-green);
+  box-shadow: 0 0 10px rgba(160, 255, 160, 0.3);
 }
 
 /* Badges */
@@ -281,16 +286,103 @@ h1 {
   border-radius: 10px;
   font-size: 0.8em;
   font-weight: bold;
+  color: white !important; 
 }
 
 .breach-danger {
-  background-color: var(--daria-accent);
-  color: var(--daria-dark);
+  background-color: #8a0303;
+  color: var(--shego-black);
 }
 
 .breach-safe {
-  background-color: var(--shego-green);
+  background-color: #006400;
   color: var(--shego-black);
+}
+
+/* Reset Password Page Styles */
+.reset-container {
+    width: 400px;
+    padding: 40px;
+    background-color: var(--daria-green);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    border: 1px solid var(--daria-accent);
+    margin: 50px auto;
+}
+
+.reset-form h2 {
+    color: var(--shego-dark-green);
+    margin-bottom: 20px;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 5px rgba(160, 255, 160, 0.3);
+}
+
+.reset-form input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid var(--daria-accent);
+    border-radius: 5px;
+    background-color: white;
+    color: var(--daria-light);
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s;
+}
+
+.reset-form input:focus {
+    outline: none;
+    border-color: var(--shego-green);
+    box-shadow: 0 0 10px rgba(160, 255, 160, 0.3);
+}
+
+.password-strength {
+    margin: 10px 0;
+    text-align: left;
+    color: var(--shego-dark-green);
+    font-size: 0.9em;
+}
+
+.strength-bar {
+    height: 5px;
+    background-color: var(--daria-dark);
+    border-radius: 3px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Strength level colors */
+.strength-fill.weak {
+    background-color: var(--daria-accent);
+}
+
+.strength-fill.medium {
+    background: linear-gradient(90deg, var(--daria-accent), #ffcc00);
+}
+
+.strength-fill.strong {
+    background-color: var(--shego-green);
+}
+
+/* Error message styling */
+.error-message {
+    color: var(--daria-accent);
+    font-size: 0.8em;
+    margin-top: 5px;
+    text-align: left;
+}
+
+/* Success message styling */
+.success-message {
+    color: var(--shego-green);
+    margin-bottom: 20px;
+    font-weight: bold;
 }
 
 /* Responsive */

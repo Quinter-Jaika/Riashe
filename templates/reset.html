@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password - Huntrix</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="home.html" class="logo">RIASHE</a>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('dashboard') }}">Security Dashboard</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="reset-container">
+        <form class="reset-form" method="POST" action="/reset-password">
+            <h2>Reset Your Password</h2>
+            
+            <input type="password" name="current-password" placeholder="Current Password" required>
+            
+            <input type="password" name="new-password" id="new-password" placeholder="New Password" required>
+            <div class="password-strength">
+                Password Strength: <span id="strength-text">Weak</span>
+                <div class="strength-bar">
+                    <div class="strength-fill" id="strength-fill"></div>
+                </div>
+            </div>
+            
+            <input type="password" name="confirm-password" placeholder="Confirm New Password" required>
+            
+            <button type="submit" class="btn-primary">Reset Password</button>
+        </form>
+    </div>
+
+    <script>
+        // Password strength indicator
+        const passwordInput = document.getElementById('new-password');
+        const strengthText = document.getElementById('strength-text');
+        const strengthFill = document.getElementById('strength-fill');
+
+    passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        let strength = 0;
+        
+        // Length check
+        if (password.length >= 8) strength += 1;
+        if (password.length >= 12) strength += 1;
+        
+        // Character type checks
+        if (/[A-Z]/.test(password)) strength += 1;
+        if (/[0-9]/.test(password)) strength += 1;
+        if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+        
+        // Update display
+        const percent = (strength / 5) * 100;
+        strengthFill.style.width = percent + '%';
+        
+        // Update classes and text
+        strengthFill.className = 'strength-fill'; // Reset classes
+        if (strength <= 2) {
+            strengthText.textContent = 'Weak';
+            strengthFill.classList.add('weak');
+        } else if (strength <= 4) {
+            strengthText.textContent = 'Medium';
+            strengthFill.classList.add('medium');
+        } else {
+            strengthText.textContent = 'Strong';
+            strengthFill.classList.add('strong');
+        }
+    });
+    </script>
+</body>
+</html>

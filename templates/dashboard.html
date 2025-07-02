@@ -9,7 +9,7 @@
 <body>
     <nav>
         <div class="nav-container">
-            <a href="{{ url_for('home', password=password) }}" class="logo">HUNTRIX</a>
+            <a href="{{ url_for('home', password=password) }}" class="logo">RIASHE</a>
             <div class="nav-links">
                 <a href="{{ url_for('home', password=password) }}">Home</a>
                 <a href="{{ url_for('dashboard', password=password) }}">Security Dashboard</a>
@@ -97,7 +97,7 @@
                 <li>Enable two-factor authentication where available</li>
             </ul>
             
-            <button onclick="window.location.href='/change-password'" class="btn-primary">
+            <button onclick="window.location.href='{{ url_for('reset_password') }}'" class="btn-primary">
                 Change Password Now
             </button>
         </div>
