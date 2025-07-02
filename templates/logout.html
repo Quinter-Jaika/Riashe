@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Logout - Huntrix</title>
+    <style>
+        /* Consistent styling with home.html */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        
+        nav {
+            background-color: #8a0303;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #ffcc00;
+        }
+        
+        .logout-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+        }
+        
+        .logout-message {
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .logout-btn {
+            background-color: #8a0303;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #6a0000;
+        }
+        
+        footer {
+            background-color: #8a0303;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="home.html" class="logo">HUNTRIX</a>
+            <div class="nav-links">
+                <a href="home.html">Home</a>
+                <a href="dashboard.html">Profile</a>
+                <a href="logout.html">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="logout-container">
+        <h1>Mission Logout Protocol</h1>
+        <div class="logout-message">
+            <p>Agent, you are about to exit the Huntrix secure network.</p>
+            <p>Remember: Always clear your demon tracking history and seal any active portals before logging out.</p>
+            <p>The Saja Boys count on your discretion.</p>
+        </div>
+        <button class="logout-btn" onclick="performLogout()">CONFIRM LOGOUT</button>
+    </div>
+
+    <footer>
+        <p>© 2023 Huntrix Organization. Secure Channel Alpha-9</p>
+    </footer>
+
+    <script>
+        function performLogout() {
+            // In a real implementation, this would handle the logout process
+            alert("Logout sequence initiated. Demon wards disengaged.");
+            // Redirect after logout - in a real app this would be after successful logout
+            setTimeout(() => {
+                window.location.href = "home.html";
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

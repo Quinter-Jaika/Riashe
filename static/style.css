@@ -1,0 +1,310 @@
+/* Daria & Shego Inspired Theme */
+:root {
+  /* Daria Colors */
+  --daria-green: #2a4a3c;
+  --daria-dark: #1a1a1a;
+  --daria-light: #e0e0e0;
+  --daria-accent: #b76eb8; /* Purple-pink */
+  
+  /* Shego Colors */
+  --shego-black: #000000;
+  --shego-green: #00ff00;
+  --shego-dark-green: #006400;
+  --shego-accent: #ff1493; /* Deep pink */
+}
+
+/* Base Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: var(--daria-dark);
+  color: var(--daria-light);
+}
+
+/* Background Pattern */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(
+      135deg, 
+      var(--daria-green) 25%, 
+      transparent 25%
+    ) -50px 0,
+    linear-gradient(
+      225deg, 
+      var(--daria-green) 25%, 
+      transparent 25%
+    ) -50px 0,
+    linear-gradient(
+      315deg, 
+      var(--daria-green) 25%, 
+      transparent 25%
+    ),
+    linear-gradient(
+      45deg, 
+      var(--daria-green) 25%, 
+      transparent 25%
+    );
+  background-size: 100px 100px;
+  background-color: var(--daria-dark);
+  opacity: 0.3;
+  z-index: -1;
+}
+
+/* Navigation - Shego Inspired */
+nav {
+  background-color: var(--shego-black);
+  padding: 15px 0;
+  box-shadow: 0 2px 10px var(--shego-green);
+  border-bottom: 1px solid var(--shego-green);
+}
+
+.nav-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--shego-green);
+  text-decoration: none;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 5px var(--shego-green);
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: var(--daria-light);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.nav-links a:hover {
+  color: var(--shego-green);
+  background-color: rgba(0, 255, 0, 0.1);
+  text-shadow: 0 0 5px var(--shego-green);
+}
+
+/* Login Page - Daria Inspired */
+.login-container {
+  width: 400px;
+  padding: 40px;
+  background-color: var(--daria-green);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  text-align: center;
+  border: 1px solid var(--daria-accent);
+  margin: 50px auto;
+}
+
+.login-form h2 {
+  color: var(--daria-accent);
+  margin-bottom: 20px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 2px solid var(--daria-accent);
+  border-radius: 5px;
+  background-color: var(--daria-dark);
+  color: var(--daria-light);
+  font-family: 'Courier New', monospace;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: var(--shego-green);
+  box-shadow: 0 0 10px var(--shego-green);
+}
+
+.login-form button {
+  background-color: var(--daria-accent);
+  color: var(--daria-dark);
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+  font-family: 'Courier New', monospace;
+  margin-top: 20px;
+}
+
+.login-form button:hover {
+  background-color: var(--shego-green);
+  color: var(--shego-black);
+  box-shadow: 0 0 10px var(--shego-green);
+}
+
+/* Dashboard - Shego Tech Inspired */
+.dashboard {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 30px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  border: 1px solid var(--shego-green);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+}
+
+.score-card {
+  background: linear-gradient(135deg, var(--daria-green) 0%, var(--shego-black) 100%);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  border: 1px solid var(--shego-green);
+}
+
+.score-value {
+  font-size: 72px;
+  font-weight: bold;
+  color: var(--shego-green);
+  text-shadow: 0 0 10px var(--shego-green);
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.metric-card {
+  background-color: rgba(42, 74, 60, 0.5); /* daria-green */
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--daria-accent);
+}
+
+.metric-card h3 {
+  color: var(--shego-green);
+  border-bottom: 1px solid var(--daria-accent);
+  padding-bottom: 5px;
+}
+
+/* Progress Bars */
+.progress-bar {
+  height: 10px;
+  background-color: var(--daria-dark);
+  border-radius: 5px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--daria-accent), var(--shego-green));
+  transition: width 0.5s ease;
+}
+
+/* Home Page - Daria's World */
+.content {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  color: var(--daria-accent);
+  border-bottom: 2px solid var(--shego-green);
+  padding-bottom: 10px;
+  font-family: 'Courier New', monospace;
+}
+
+.lore-section {
+  background-color: rgba(42, 74, 60, 0.7); /* daria-green */
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  border: 1px solid var(--daria-accent);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.lore-section h2 {
+  color: var(--shego-green);
+}
+
+.lore-section ul {
+  padding-left: 20px;
+}
+
+.lore-section li {
+  margin-bottom: 8px;
+  color: var(--daria-light);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--daria-accent);
+  color: var(--daria-dark);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+  display: inline-block;
+  margin-top: 10px;
+  font-family: 'Courier New', monospace;
+}
+
+.btn-primary:hover {
+  background-color: var(--shego-green);
+  color: var(--shego-black);
+  box-shadow: 0 0 10px var(--shego-green);
+}
+
+/* Badges */
+.breach-badge {
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.breach-danger {
+  background-color: var(--daria-accent);
+  color: var(--daria-dark);
+}
+
+.breach-safe {
+  background-color: var(--shego-green);
+  color: var(--shego-black);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .login-container {
+    width: 90%;
+  }
+  
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+}

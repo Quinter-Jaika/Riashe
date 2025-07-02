@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Huntrix - Kpop Demon Hunters</title>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="logo">HUNTRIX</a>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('dashboard', password=password) }}">Security Dashboard</a>
+                <a href="/">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="content">
+        <h1>The Huntrix & Saja Boys Lore</h1>
+        
+        <div class="lore-section">
+            <h2>Huntrix</h2>
+            <p>The Huntrix is a secret society of demon hunters who operate in the shadows of the K-pop world. While idols perform on stage, the Huntrix protects humanity from supernatural threats that lurk behind the glamour of the entertainment industry.</p>
+            <p>Members are trained in both combat and performance arts, as their cover often requires them to blend into the music industry. The most elite unit within Huntrix is known as "Saja Boys."</p>
+            <p>Each member possesses unique abilities:</p>
+            <ul>
+                <li> Rumi: Leader, Main Vocalist</li>
+                <li> Mira: Visual, Main Dancer</li>
+                <li> Zoey: Maknae, Main Rapper, Lyricist</li>
+            </ul>
+        </div>
+        
+        <div class="lore-section">
+            <h2>Saja Boys</h2>
+            <p>Saja Boys are Huntrix's most skilled  rival boy band of demons in disguise, whose goal is to destroy the hunters for good and steal their fans.</p>
+            <p>Each member possesses unique abilities:</p>
+            <ul>
+                <li><strong>Jinu:</strong> Leader, Main Vocalist</li>
+                <li><strong>Abby:</strong> Main Dancer, Vocalist, Rapper</li>
+                <li><strong>Mystery:</strong> Lead Vocalist</li>
+                <li><strong>Romance:</strong> Dancer, Vocalist</li>
+                <li><strong>Baby:</strong> Main Rapper, Maknae</li>
+            </ul>
+        </div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Password Security Dashboard</title>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="{{ url_for('home', password=password) }}" class="logo">HUNTRIX</a>
+            <div class="nav-links">
+                <a href="{{ url_for('home', password=password) }}">Home</a>
+                <a href="{{ url_for('dashboard', password=password) }}">Security Dashboard</a>
+                <a href="/">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="background-image"></div>
+    <div class="dashboard">
+        <h1>Password Security Dashboard</h1>
+        
+        <div class="score-card">
+            <h2>Your Password Security Score</h2>
+            <div class="score-value score-{{ score|int }}">{{ score }}</div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ score }}%"></div>
+            </div>
+            
+            <p>
+                {% if score >= 80 %}
+                    Excellent security! Keep it up.
+                {% elif score >= 60 %}
+                    Good, but could be stronger.
+                {% elif score >= 40 %}
+                    Fair. Consider improving your password.
+                {% else %}
+                    Weak security. Immediate change recommended.
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="metrics">
+            <div class="metric-card">
+                <h3>Breach Status 
+                    <span class="breach-badge {% if result.is_pwned %}breach-danger{% else %}breach-safe{% endif %}">
+                        {% if result.is_pwned %}At Risk{% else %}Secure{% endif %}
+                    </span>
+                </h3>
+                {% if result.is_pwned %}
+                    <p>Found in <strong>{{ result.count }}</strong> data breaches</p>
+                {% else %}
+                    <p>No breaches found</p>
+                {% endif %}
+            </div>
+            
+            <div class="metric-card">
+                <h3>Password Length</h3>
+                <p>{{ password|length }} characters</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {% if password|length / 20 * 100 > 100 %}100{% else %}{{ password|length / 20 * 100 }}{% endif %}%"></div>
+                </div>
+                <p>{{ result.length }}</p>
+            </div>
+            
+            <div class="metric-card">
+                <h3>Password Complexity</h3>
+                <p>{{ result.complexity }}</p>
+            </div>
+        </div>
+        
+        <div class="recommendations">
+            <h3>Recommendations</h3>
+            <ul>
+                {% if score < 80 %}
+                    <li>Use a longer password (at least 16 characters)</li>
+                {% endif %}
+                
+                {% if not has_upper or not has_lower or not has_digit or not has_special %}
+                    <li>Include a mix of:
+                        <ul>
+                            {% if not has_upper %}<li>Uppercase letters</li>{% endif %}
+                            {% if not has_lower %}<li>Lowercase letters</li>{% endif %}
+                            {% if not has_digit %}<li>Numbers</li>{% endif %}
+                            {% if not has_special %}<li>Special characters</li>{% endif %}
+                        </ul>
+                    </li>
+                {% endif %}
+                
+                {% if result.is_pwned %}
+                    <li><strong>Change this password immediately</strong> as it's been compromised</li>
+                {% endif %}
+                
+                <li>Consider using a password manager to generate and store strong passwords</li>
+                <li>Enable two-factor authentication where available</li>
+            </ul>
+            
+            <button onclick="window.location.href='/change-password'" class="btn-primary">
+                Change Password Now
+            </button>
+        </div>
+    </div>
+</body>
+</html>
