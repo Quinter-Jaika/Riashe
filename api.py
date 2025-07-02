@@ -66,11 +66,11 @@ def breach_password(password):
             return int(line.split(':')[1])
     return 0
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
-        password = request.form['password']
-        return redirect(url_for('home', password=password))
+        # Your login logic
+        return redirect(url_for('home'))
     return render_template('login.html')
 
 @app.route('/home')
@@ -153,6 +153,13 @@ def reset_password():
         return redirect(url_for('dashboard'))
     
     return render_template('reset.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        # Handle registration logic
+        return redirect(url_for('home'))
+    return render_template('registration.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

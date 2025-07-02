@@ -385,6 +385,173 @@ h1 {
     font-weight: bold;
 }
 
+/* Registration Page Styles */
+.register-container {
+    width: 400px;
+    padding: 40px;
+    background-color: var(--daria-green);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    border: 1px solid var(--daria-accent);
+    margin: 50px auto;
+}
+
+.register-form h2 {
+    color: var(--shego-dark-green);
+    margin-bottom: 25px;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 5px rgba(160, 255, 160, 0.3);
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-group .input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--daria-accent);
+}
+
+.register-form input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    margin: 5px 0;
+    border: 2px solid var(--daria-accent);
+    border-radius: 5px;
+    background-color: white;
+    color: var(--daria-light);
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s;
+}
+
+.register-form input:focus {
+    outline: none;
+    border-color: var(--shego-green);
+    box-shadow: 0 0 10px rgba(160, 255, 160, 0.3);
+}
+
+.password-strength {
+    margin: 10px 0 20px;
+}
+
+.strength-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    color: var(--shego-dark-green);
+    font-size: 0.9em;
+}
+
+.strength-bar {
+    height: 5px;
+    background-color: var(--daria-dark);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Strength level colors */
+.strength-fill.weak {
+    background-color: var(--daria-accent);
+}
+
+.strength-fill.medium {
+    background: linear-gradient(90deg, var(--daria-accent), #ffcc00);
+}
+
+.strength-fill.strong {
+    background-color: var(--shego-green);
+}
+
+.form-footer {
+    margin-top: 25px;
+}
+
+.form-footer p {
+    margin-top: 15px;
+    color: var(--shego-dark-green);
+}
+
+.form-footer a {
+    color: var(--daria-accent);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.form-footer a:hover {
+    color: var(--shego-green);
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .register-container {
+        width: 90%;
+        padding: 30px 20px;
+    }
+    
+    .form-group .input-icon {
+        left: 10px;
+    }
+    
+    .register-form input {
+        padding-left: 35px;
+    }
+}
+
+/* Auth redirect links */
+.auth-redirect {
+    margin-top: 20px;
+    color: var(--shego-dark-green);
+    font-size: 0.9em;
+}
+
+.auth-redirect a {
+    color: var(--daria-accent);
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: bold;
+}
+
+.auth-redirect a:hover {
+    color: var(--shego-green);
+    text-decoration: underline;
+}
+
+/* Make form-footer styles consistent */
+.form-footer {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.form-footer p {
+    margin-top: 15px;
+    color: var(--shego-dark-green);
+    font-size: 0.9em;
+}
+
+.form-footer a {
+    color: var(--daria-accent);
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: bold;
+}
+
+.form-footer a:hover {
+    color: var(--shego-green);
+    text-decoration: underline;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .nav-container {
