@@ -1,18 +1,8 @@
 <?php
 session_start();
 
-// Database configuration
-$db_host = 'localhost';
-$db_username = 'root';
-$db_password = '';
-$db_name = 'riashe_db';
-
-// Connect to database
-$conn = new mysqli($db_host, $db_username, $db_password, $db_name);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once 'db_connect.php';
+require_once 'notifications.php';
 
 // Process login
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -28,43 +18,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
         
-    if (password_verify($password, $user['password_hash'])) {
-        // Password is correct - now check with HIBP
-        $hibpResult = checkHIBP($password);
-        
-        // Record password check in database
-        recordPasswordCheck(
-            $conn, 
-            $user['id'], 
-            $user['password_hash'], 
-            $hibpResult['is_compromised'], 
-            $hibpResult['breach_count']
-        );
-        
-        // Set session variables
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['is_admin'] = ($user['is_admin'] == 1); // Explicit boolean conversion
-        
-        // Handle compromised password warning
-        if ($hibpResult['is_compromised']) {
-            $_SESSION['password_warning'] = "Warning: This password has appeared in ".$hibpResult['breach_count']." data breaches!";
-                // Notify admin
-                $user_details = "User: {$_SESSION['username']} (ID: {$_SESSION['user_id']})";
-                $message = "Password breach detected!\n$user_details\nBreach count: {$hibpResult['breach_count']}";
-                sendAdminNotification('Security Alert', $message);
-        }
-        
-        // Redirect based on admin status
-        if (($_SESSION['is_admin']) == true) {
-            header("Location: admin.php");
-        } else {
-            header("Location: dashboard.php");
-        }
-        exit();
-    }        
-
-        // Verify password
         if (password_verify($password, $user['password_hash'])) {
             // Password is correct - now check with HIBP
             $hibpResult = checkHIBP($password);
@@ -78,21 +31,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $hibpResult['breach_count']
             );
             
+            // Set session variables
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['is_admin'] = ($user['is_admin'] == 1);
+            
             if ($hibpResult['is_compromised']) {
-                // Password is compromised - warn user but allow login
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['password_warning'] = "Warning: This password has appeared in ".$hibpResult['breach_count']." data breaches!";
-                header("Location: dashboard.php");
-                exit();
-            } else {
-                // Password is clean
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['is_admin'] = $user['is_admin'] == 1; 
-                header("Location: dashboard.php");
+                // Force password reset on next login
+                $stmt = $conn->prepare("UPDATE users SET force_password_reset = TRUE WHERE id = ?");
+                $stmt->bind_param("i", $user['id']);
+                $stmt->execute();
+                
+                header("Location: reset_password.php");
                 exit();
             }
+            
+            // Redirect based on admin status
+            if ($_SESSION['is_admin']) {
+                header("Location: admin.php");
+            } else {
+                header("Location: dashboard.php");
+            }
+            exit();
         } else {
             // Invalid password
             header("Location: login.php?error=Invalid username or password");
@@ -149,23 +109,6 @@ function recordPasswordCheck($conn, $user_id, $password_hash, $is_compromised, $
         if ($is_compromised) {
         notifyAdminAboutBreach($user_id, $breach_count);
     }
-}
-
-function notifyAdminAboutBreach($user_id, $breach_count) {
-    $ntfy_topic = "riashe_breach_alerts"; // Choose a secret topic name
-    $ntfy_url = "https://ntfy.sh";
-
-    $message = "🚨 Security Alert: User ID $user_id has a password found in $breach_count breaches!";
-    
-    $context = stream_context_create([
-        'http' => [
-            'method' => 'POST',
-            'header' => "Content-Type: text/plain\r\n",
-            'content' => $message
-        ]
-    ]);
-    
-    @file_get_contents("$ntfy_url/$ntfy_topic", false, $context);
 }
 
 $conn->close();

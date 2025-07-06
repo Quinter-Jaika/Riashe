@@ -17,18 +17,7 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     exit();
 }
 
-// Database configuration
-$db_host = 'localhost';
-$db_username = 'root';
-$db_password = '';
-$db_name = 'riashe_db';
-
-// Connect to database
-$conn = new mysqli($db_host, $db_username, $db_password, $db_name);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once 'db_connect.php';
 
 // Get all compromised passwords
 $breaches_query = "
@@ -199,14 +188,6 @@ $conn->close();
             });
         });
 
-        function notifyUser(userId) {
-            if (confirm('Send a security notification to this user?')) {
-                // AJAX call to notify user
-                alert('Notification sent to user #' + userId);
-                // In production: fetch('notify_user.php?user_id=' + userId);
-            }
-        }
-
         function forcePasswordReset(userId) {
             if (confirm('Force this user to reset their password on next login?')) {
                 // AJAX call to force password reset
@@ -214,28 +195,6 @@ $conn->close();
                 // In production: fetch('force_reset.php?user_id=' + userId);
             }
         }
-        // Subscribe to ntfy topic
-        function subscribeToBreachAlerts() {
-            const eventSource = new EventSource('https://ntfy.sh/your_secret_topic/sses');
-            
-            eventSource.onmessage = function(e) {
-                const notification = JSON.parse(e.data);
-                showAdminAlert(notification.message);
-            };
-        }
-
-        function showAdminAlert(message) {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = 'alert alert-danger';
-            alertDiv.innerHTML = `
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Security Alert!</strong> ${message}
-            `;
-            document.getElementById('alerts-container').prepend(alertDiv);
-        }
-
-        // Call on page load
-        window.addEventListener('load', subscribeToBreachAlerts);
     </script>
 </body>
 </html>

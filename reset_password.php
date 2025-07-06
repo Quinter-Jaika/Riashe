@@ -1,84 +1,17 @@
 <?php
 session_start();
 
-// Redirect to login if not authenticated
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-// Database configuration
-$db_host = 'localhost';
-$db_username = 'root';
-$db_password = '';
-$db_name = 'riashe';
-
-// Connect to database
-$conn = new mysqli($db_host, $db_username, $db_password, $db_name);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once 'db_connect.php';
 
 // Initialize variables
 $error = '';
 $success = '';
 
-// Process form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $current_password = $_POST['current_password'];
-    $new_password = $_POST['new_password'];
-    $confirm_password = $_POST['confirm_password'];
-    
-    // Validate inputs
-    if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
-        $error = "All fields are required.";
-    } elseif ($new_password !== $confirm_password) {
-        $error = "New passwords do not match.";
-    } elseif (strlen($new_password) < 8) {
-        $error = "Password must be at least 8 characters long.";
-    } else {
-        // Verify current password
-        $stmt = $conn->prepare("SELECT password_hash FROM users WHERE id = ?");
-        $stmt->bind_param("i", $_SESSION['user_id']);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows === 1) {
-            $user = $result->fetch_assoc();
-            
-            if (password_verify($current_password, $user['password_hash'])) {
-                // Check new password against HIBP
-                $hibpResult = checkHIBP($new_password);
-                
-                if ($hibpResult['is_compromised']) {
-                    $error = "This password has appeared in ".$hibpResult['breach_count']." breaches. Please choose a different one.";
-                } else {
-                    // Update password
-                    $new_hash = password_hash($new_password, PASSWORD_DEFAULT);
-                    $update_stmt = $conn->prepare("UPDATE users SET password_hash = ? WHERE id = ?");
-                    $update_stmt->bind_param("si", $new_hash, $_SESSION['user_id']);
-                    
-                    if ($update_stmt->execute()) {
-                        // Record password change
-                        recordPasswordChange($conn, $_SESSION['user_id'], $new_hash, 0, 0);
-                        $success = "Password changed successfully!";
-                    } else {
-                        $error = "Error updating password: " . $conn->error;
-                    }
-                    $update_stmt->close();
-                }
-            } else {
-                $error = "Current password is incorrect.";
-            }
-        } else {
-            $error = "User not found.";
-        }
-        $stmt->close();
-    }
-}
-
-// HIBP Check Function
 function checkHIBP($password) {
     $sha1_password = strtoupper(sha1($password));
     $prefix = substr($sha1_password, 0, 5);
@@ -107,14 +40,71 @@ function checkHIBP($password) {
     return $result;
 }
 
-// Record Password Change Function
 function recordPasswordChange($conn, $user_id, $password_hash, $is_compromised, $breach_count) {
     $stmt = $conn->prepare("INSERT INTO password_security 
-                          (user_id, password_hash, is_compromised, breach_count, check_date) 
-                          VALUES (?, ?, ?, ?, NOW())");
+        (user_id, password_hash, is_compromised, breach_count, check_date) 
+        VALUES (?, ?, ?, ?, NOW())");
     $stmt->bind_param("isii", $user_id, $password_hash, $is_compromised, $breach_count);
     $stmt->execute();
     $stmt->close();
+        if ($is_compromised) {
+        notifyAdminAboutBreach($user_id, $breach_count);
+    }
+}
+
+// Process form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $current_password = $_POST['current_password'];
+    $new_password = $_POST['new_password'];
+    $confirm_password = $_POST['confirm_password'];
+    
+    // Validate inputs
+    if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
+        $error = "All fields are required.";
+    } elseif ($new_password !== $confirm_password) {
+        $error = "New passwords do not match.";
+    } elseif (strlen($new_password) < 8) {
+        $error = "Password must be at least 8 characters long.";
+    } else {
+        // Verify current password
+        $stmt = $conn->prepare("SELECT password_hash, force_password_reset FROM users WHERE id = ?");
+        $stmt->bind_param("i", $_SESSION['user_id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+            
+            if (password_verify($current_password, $user['password_hash'])) {
+                // Check new password against HIBP
+                $hibpResult = checkHIBP($new_password);
+                
+                
+                if ($hibpResult['is_compromised']) {
+                    $error = "This password has appeared in ".$hibpResult['breach_count']." breaches. Please choose a different one.";
+                } else {
+                    // Update password
+                    $new_hash = password_hash($new_password, PASSWORD_DEFAULT);
+                    $update_stmt = $conn->prepare("UPDATE users SET password_hash = ?, force_password_reset = FALSE WHERE id = ?");
+                    $update_stmt->bind_param("si", $new_hash, $_SESSION['user_id']);
+                    
+                    if ($update_stmt->execute()) {
+                        // Record password change
+                        recordPasswordChange($conn, $_SESSION['user_id'], $new_hash, 0, 0);
+                        $success = "Password changed successfully!";
+                    } else {
+                        $error = "Error updating password: " . $conn->error;
+                    }
+                    $update_stmt->close();
+                }
+            } else {
+                $error = "Current password is incorrect.";
+            }
+        } else {
+            $error = "User not found.";
+        }
+        $stmt->close();
+    }
 }
 
 $conn->close();

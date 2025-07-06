@@ -1,17 +1,6 @@
 <?php
-// Database configuration
-$db_host = 'localhost';
-$db_username = 'root'; // Default XAMPP username
-$db_password = ''; // Default XAMPP password is empty
-$db_name = 'riashe_db'; // Change to your database name
 
-// Connect to database
-$conn = new mysqli($db_host, $db_username, $db_password, $db_name);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once 'db_connect.php';
 
 // Process form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
