@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-require_once 'db_connect.php';
-require_once 'notifications.php';
+require_once '../database/db_connect.php';
+require_once '../process/notifications.php';
 
 // Process login
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -42,25 +42,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->bind_param("i", $user['id']);
                 $stmt->execute();
                 
-                header("Location: reset_password.php");
+                header("Location: ../templates/reset_password.php");
                 exit();
             }
             
             // Redirect based on admin status
             if ($_SESSION['is_admin']) {
-                header("Location: admin.php");
+                header("Location: ../templates/admin.php");
             } else {
-                header("Location: dashboard.php");
+                header("Location: ../templates/dashboard.php");
             }
             exit();
         } else {
             // Invalid password
-            header("Location: login.php?error=Invalid username or password");
+            header("Location: ../templates/login.php?error=Invalid username or password");
             exit();
         }
     } else {
         // User not found
-        header("Location: login.php?error=Invalid username or password");
+        header("Location: ../templates/login.php?error=Invalid username or password");
         exit();
     }
 }

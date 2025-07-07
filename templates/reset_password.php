@@ -6,7 +6,8 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-require_once 'db_connect.php';
+require_once '../database/db_connect.php';
+require_once '../process/notifications.php';
 
 // Initialize variables
 $error = '';
@@ -114,7 +115,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="../css/theme.css">
     <title>Reset Password</title>
 </head>
 <body>

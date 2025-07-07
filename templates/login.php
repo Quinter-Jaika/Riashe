@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="../css/theme.css">
     <title>Login - Riashe</title>
 </head>
 <body>
@@ -23,7 +23,7 @@
                 <?php endif; ?>
             </div>
             
-            <form action="process_login.php" method="post">
+            <form action="../process/process_login.php" method="post">
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>

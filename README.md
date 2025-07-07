@@ -121,25 +121,25 @@ A comprehensive system for monitoring password security, detecting compromised c
 
 ```
 riashe/
-├── assets/                  # Static resources
-│   ├── css/                 # Stylesheets (theme.css)
-├── database/                # Database operations
-│   ├── db_connect.php       # Database connection
-│   └── import_breach_data.php # Data importer
-├── process/                 # Core processes
-│   ├── notifications.php    # Notifications
-│   └── process_login.php    # Login process
-│   └── process_registration # Registration process
+├── css/                         # Static resources
+│   ├── theme.css/               # Stylesheets (theme.css)
+├── database/                    # Database operations
+│   ├── db_connect.php           # Database connection
+│   └── import_breach_data.php   # Data importer
+├── process/                     # Core processes
+│   ├── notifications.php        # Notifications
+│   └── process_login.php        # Login process
+│   └── process_registration.php # Registration process
 ├── templates/                   # UI templates
-│   └── admin.php            # Admin Dashboard
-│   └── dashboard.php        # User Security Dashboard
-│   └── home.html            # Home Page
-│   └── login.php            # Login Page
-│   └── logout               # Logout sequence
-│   └── register             # Registration Page
-│   └── reset_password.php   # Password Reset Page
-├── LICENSE                  # MIT License
-└── README.md                # This document
+│   └── admin.php                # Admin Dashboard
+│   └── dashboard.php            # User Security Dashboard
+│   └── home.html                # Home Page
+│   └── login.php                # Login Page
+│   └── logout.php               # Logout sequence
+│   └── register.php             # Registration Page
+│   └── reset_password.php       # Password Reset Page
+├── LICENSE                      # MIT License
+└── README.md                    # This document
 ```
 
 ## 🔧 Troubleshooting

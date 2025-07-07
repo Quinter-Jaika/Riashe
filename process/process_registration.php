@@ -1,6 +1,6 @@
 <?php
 
-require_once 'db_connect.php';
+require_once '../database/db_connect.php';
 
 // Process form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<p>$error</p>";
         }
         echo "</div>";
-        echo "<p><a href='register.php'>Try again</a></p>";
+        echo "<p><a href='../templates/register.php'>Try again</a></p>";
     }
 }
 

@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="../css/theme.css">
     <title>Huntrix - Kpop Demon Hunters</title>
 </head>
 <body>
     <nav>
-        <div class="nav-container">
-            <a href="{{ url_for('home') }}" class="logo">RIASHE</a>
-            <div class="nav-links">
-        <a href="home.html#home" class="nav-link">Home</a>
-        <a href="dashboard.php#security" class="nav-link">Security</a>
-        <a href="reset_password.php" class="nav-link">Change Password</a>
+        <div class="navbar">
+            <a href="{{ url_for('home') }}" class="navbar-brand">RIASHE</a>
+            <div class="navbar-nav">
+        <a  href="home.html#home" class="nav-link">Home</a>
+        <a  href="dashboard.php#security" class="nav-link">Security</a>
+        <a  href="reset_password.php" class="nav-link">Change Password</a>
         <a href="logout.php" class="nav-link logout">Logout</a>
             </div>
         </div>

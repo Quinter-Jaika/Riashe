@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-require_once 'db_connect.php';
+require_once '../database/db_connect.php';
 
 // Get user's latest password security check
 $stmt = $conn->prepare("
@@ -36,7 +36,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="../css/theme.css">
     <title>Password Security Dashboard</title>
 </head>
 <body>

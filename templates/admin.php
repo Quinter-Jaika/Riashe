@@ -17,7 +17,7 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     exit();
 }
 
-require_once 'db_connect.php';
+require_once '../database/db_connect.php';
 
 // Get all compromised passwords
 $breaches_query = "
@@ -58,7 +58,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="../css/theme.css">
     <title>Admin Dashboard - Breach Review</title>
 </head>
 <body>
