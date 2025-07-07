@@ -426,3 +426,27 @@ select {
     margin-top: 1.5rem;
     color: var(--daria-gray);
 }
+.lore-section {
+   background-color: var(--daria-dark);
+   color: var(--theme-light);
+   padding: 2rem;
+   border-radius: 8px;
+   margin-bottom: 2rem;
+   box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+   border-left: 4px solid var(--daria-accent);
+}
+        
+.lore-section h2 {
+   color: var(--theme-primary) !important;
+   border-bottom: 2px solid var(--daria-accent);
+   padding-bottom: 0.5rem;
+   margin-top: 0;
+}
+        
+.lore-section ul {
+   padding-left: 1.5rem;
+}
+        
+.lore-section li {
+   margin-bottom: 0.5rem;
+}
