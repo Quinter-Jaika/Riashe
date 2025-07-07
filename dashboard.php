@@ -43,7 +43,7 @@ $conn->close();
 <nav class="navbar">
     <a href="dashboard.php" class="navbar-brand">RIASHE</a>
     <div class="navbar-nav">
-        <a href="dashboard.php#home" class="nav-link">Home</a>
+        <a href="home.html#home" class="nav-link">Home</a>
         <a href="dashboard.php#security" class="nav-link">Security</a>
         <a href="reset_password.php" class="nav-link">Change Password</a>
         <a href="logout.php" class="nav-link logout">Logout</a>

@@ -161,8 +161,6 @@ $conn->close();
                     <li>Different from your current password</li>
                 </ul>
             </div>
-            
-            <a href="dashboard.php" class="back-link">Cancel and return to Dashboard</a>
         <?php endif; ?>
     </div>
 
