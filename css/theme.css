@@ -450,3 +450,42 @@ select {
 .lore-section li {
    margin-bottom: 0.5rem;
 }
+
+.security-alert {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.security-alert p {
+    margin: 5px 0;
+}
+
+.security-fact {
+    font-weight: bold;
+}
+/* Breach Tools Styling */
+.alert {
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+.form-inline .form-control {
+    width: 100px;
+    display: inline-block;
+}
+
+.text-muted {
+    color: #6c757d;
+    font-size: 0.9em;
+}

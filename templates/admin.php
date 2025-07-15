@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Check if user is admin
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
     // For security, don't reveal that the admin page exists
     header("HTTP/1.1 403 Forbidden");
     // Or redirect to dashboard with error message
@@ -18,6 +18,8 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
 }
 
 require_once '../database/db_connect.php';
+// Include breach checking functions
+require_once '../process/breach_functions.php';
 
 // Get all compromised passwords
 $breaches_query = "
@@ -32,7 +34,6 @@ $breaches_query = "
     JOIN users u ON ps.user_id = u.id
     ORDER BY ps.breach_count DESC, ps.check_date DESC
 ";
-$breaches_result = $conn->query($breaches_query);
 
 // Get stats for dashboard
 $stats_query = "
@@ -48,10 +49,38 @@ $stats_query = "
     ) as latest
     JOIN password_security ps ON ps.user_id = latest.user_id AND ps.check_date = latest.latest_check
 ";
-$stats_result = $conn->query($stats_query);
-$stats = $stats_result->fetch_assoc();
 
-$conn->close();
+// Additional stats
+$user_stats_query = "SELECT 
+    COUNT(*) as total_users,
+    SUM(sha1_breach_count > 0 OR md5_breach_count > 0) as compromised_users,
+    MAX(last_breach_check) as last_check
+    FROM users";
+
+// Execute queries
+$breaches_result = $conn->query($breaches_query);
+$stats_result = $conn->query($stats_query);
+$user_stats_result = $conn->query($user_stats_query);
+
+if (!$breaches_result || !$stats_result || !$user_stats_result) {
+    die("Database error: " . $conn->error);
+}
+
+$stats = $stats_result->fetch_assoc();
+$user_stats = $user_stats_result->fetch_assoc();
+
+// Process breach check actions
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['check_all_users'])) {
+        checkAllUsersBreaches($conn);
+        $_SESSION['admin_message'] = "Breach check completed for all users";
+    } elseif (isset($_POST['check_single_user']) && !empty($_POST['user_id'])) {
+        checkSingleUserBreaches($conn, $_POST['user_id']);
+        $_SESSION['admin_message'] = "Breach check completed for user ID " . $_POST['user_id'];
+    }
+    header("Location: admin.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,6 +95,7 @@ $conn->close();
         <a href="admin.php" class="navbar-brand">Admin Dashboard</a>
         <div class="navbar-nav">
             <a href="admin.php" class="nav-link">Breach Review</a>
+            <a href="../database/import_breach_data.php" class="nav-link">Database Update</a>
             <a href="dashboard.php" class="nav-link">User View</a>
             <a href="logout.php" class="nav-link logout">Logout</a>
         </div>
@@ -92,6 +122,45 @@ $conn->close();
                 </div>
                 <div class="stat-label">Last Check Date</div>
             </div>
+        </div>
+
+        <!-- Breach Check Tools -->
+        <div class="card">
+            <h2>Password Breach Tools</h2>
+            
+            <?php if (isset($_SESSION['admin_message'])): ?>
+                <div class="alert alert-info"><?= htmlspecialchars($_SESSION['admin_message']) ?></div>
+                <?php unset($_SESSION['admin_message']); ?>
+            <?php endif; ?>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <form method="post">
+                        <button type="submit" name="check_all_users" class="btn btn-warning">
+                            Check All Users for Breaches
+                        </button>
+                        <p class="text-muted">Checks all user passwords against HIBP and local breach DB</p>
+                    </form>
+                </div>
+                
+                <div class="col-md-6">
+                    <form method="post" class="form-inline">
+                        <div class="form-group">
+                            <input type="number" name="user_id" class="form-control" placeholder="User ID" required>
+                            <button type="submit" name="check_single_user" class="btn btn-primary ml-2">
+                                Check Single User
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <h3 class="mt-4">Breach Statistics</h3>
+            <ul>
+                <li>Total Users: <?= $user_stats['total_users'] ?></li>
+                <li>Compromised Passwords: <?= $user_stats['compromised_users'] ?></li>
+                <li>Last System-wide Check: <?= $user_stats['last_check'] ? date('M j, Y g:i a', strtotime($user_stats['last_check'])) : 'Never' ?></li>
+            </ul>
         </div>
 
         <div class="card">
@@ -198,3 +267,6 @@ $conn->close();
     </script>
 </body>
 </html>
+<?php
+$conn->close();
+?>

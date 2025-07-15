@@ -41,7 +41,7 @@ $conn->close();
 </head>
 <body>
 <nav class="navbar">
-    <a href="dashboard.php" class="navbar-brand">RIASHE</a>
+    <a href="admin.php" class="navbar-brand">RIASHE</a>
     <div class="navbar-nav">
         <a href="home.html#home" class="nav-link">Home</a>
         <a href="dashboard.php#security" class="nav-link">Security</a>

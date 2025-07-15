@@ -41,21 +41,29 @@ A comprehensive system for monitoring password security, detecting compromised c
    ```sql
    CREATE DATABASE riashe_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
    
-   -- Create required tables (see database/schema.sql for complete schema)
-   CREATE TABLE users (
+      CREATE TABLE users (
      id INT AUTO_INCREMENT PRIMARY KEY,
      username VARCHAR(50) NOT NULL UNIQUE,
-     password_hash VARCHAR(255) NOT NULL,
      email VARCHAR(100) NOT NULL UNIQUE,
      is_admin TINYINT(1) DEFAULT 0,
      force_password_reset TINYINT(1) DEFAULT 0,
-     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+     last_breach_check TIMESTAMP,
+     password_strength_score TINYINT(1),
+     bcrypt_password_hash VARCHAR(255),
+     sha256_password_hash VARCHAR(255),
+     sha1_password_hash VARCHAR(255),
+     md5_password_hash VARCHAR(255),
+     bcrypt_breach_count INT(11),
+     sha256_breach_count INT(11),
+     sha1_breach_count INT(11),
+     md5_breach_count INT(11),
+     force_password_reset TINYINT(1)
    );
    
    CREATE TABLE password_security (
-     id INT AUTO_INCREMENT PRIMARY KEY,
+     security_id INT AUTO_INCREMENT PRIMARY KEY,
      user_id INT NOT NULL,
-     password_hash VARCHAR(255) NOT NULL,
      is_compromised TINYINT(1) NOT NULL,
      breach_count INT NOT NULL,
      check_date DATETIME NOT NULL,
@@ -63,12 +71,12 @@ A comprehensive system for monitoring password security, detecting compromised c
    );
 
    CREATE TABLE breached_passwords(
-    id INT(11), 
+    breached_id INT(11) AUTO_INCREMENT PRIMARY KEY, 
     password_hash VARCHAR(128),
     hash_algorithm VARCHAR(10), 
     breach_count INT(11), 
     first_seen DATE, 
-    last_updated TIMESTAMP
+    last_breach_date TIMESTAMP
    );
    ```
 
@@ -83,11 +91,6 @@ A comprehensive system for monitoring password security, detecting compromised c
    DB_USER=your_db_user
    DB_PASS=your_secure_password
    NTFY_TOPIC=your_secret_topic  # For admin notifications
-   ```
-
-4. **Import Breach Data**:
-   ```bash
-   php database/import_breach_data.php breach_data.txt
    ```
 
 ## 🚀 Usage Scenarios
@@ -115,28 +118,32 @@ A comprehensive system for monitoring password security, detecting compromised c
 - Bulk actions:
   - Force password resets
   - Send notifications
-- Export breach data
+  - Password Security
+- Import breach data
 
 ## 📂 Project Structure
 
 ```
 riashe/
 ├── css/                         # Static resources
-│   ├── theme.css/               # Stylesheets (theme.css)
+│   └── theme.css               # Stylesheets 
 ├── database/                    # Database operations
 │   ├── db_connect.php           # Database connection
 │   └── import_breach_data.php   # Data importer
 ├── process/                     # Core processes
+│   ├── breach_functions.php     # Breach Functions
 │   ├── notifications.php        # Notifications
-│   └── process_login.php        # Login process
-│   └── process_registration.php # Registration process
+│   └── password_strength.php    # Password Strength Check 
+│   ├── process_login.php        # Login process
+│   ├── process_registration.php # Registration
+│   └── random_check.php         # Check all users for breaches
 ├── templates/                   # UI templates
-│   └── admin.php                # Admin Dashboard
+│   ├── admin.php                # Admin Dashboard
 │   └── dashboard.php            # User Security Dashboard
-│   └── home.html                # Home Page
-│   └── login.php                # Login Page
-│   └── logout.php               # Logout sequence
-│   └── register.php             # Registration Page
+│   ├── home.html                # Home Page
+│   ├── login.php                # Login Page
+│   ├── logout.php               # Logout sequence
+│   ├── register.php             # Registration Page
 │   └── reset_password.php       # Password Reset Page
 ├── LICENSE                      # MIT License
 └── README.md                    # This document

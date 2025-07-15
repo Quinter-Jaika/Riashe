@@ -15,52 +15,47 @@ function parseFileLine($line, $fileExtension) {
     // Handle different file formats
     switch ($fileExtension) {
         case 'md5sum':
-            // Format: hash  filename
             if (preg_match('/^([a-f0-9]{32})\s+/i', $line, $matches)) {
-                return [$matches[1], 1]; // Default count of 1 for md5sum files
+                return [$matches[1], 1];
             }
             break;
             
         case 'rti1':
         case 'rti2':
-            // Format: hash:count
             $parts = explode(':', $line);
             if (count($parts) >= 2) {
-                return [trim($parts[0]), (int)$parts[1]];
+                return [trim($parts[0]), max(1, (int)$parts[1])];
             }
             break;
             
         case 'part':
-            // Format: hash=count
             $parts = explode('=', $line);
             if (count($parts) >= 2) {
-                return [trim($parts[0]), (int)$parts[1]];
+                return [trim($parts[0]), max(1, (int)$parts[1])];
             }
             break;
             
         case 'torrent':
-            // Format: hash|count (or other delimiter)
             if (preg_match('/^([a-f0-9]{32,64})[\|:](\\d+)/i', $line, $matches)) {
-                return [$matches[1], (int)$matches[2]];
+                return [$matches[1], max(1, (int)$matches[2])];
             }
             break;
             
         default:
-            // Try common formats as fallback
             if (strpos($line, ':') !== false) {
                 $parts = explode(':', $line);
                 if (count($parts) >= 2) {
-                    return [trim($parts[0]), (int)$parts[1]];
+                    return [trim($parts[0]), max(1, (int)$parts[1])];
                 }
             } elseif (strpos($line, '=') !== false) {
                 $parts = explode('=', $line);
                 if (count($parts) >= 2) {
-                    return [trim($parts[0]), (int)$parts[1]];
+                    return [trim($parts[0]), max(1, (int)$parts[1])];
                 }
             }
     }
     
-    return null; // Unparseable line
+    return null;
 }
 
 function importBreachData($conn, $filePath) {
@@ -69,16 +64,31 @@ function importBreachData($conn, $filePath) {
     }
 
     $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-    $checkStmt = $conn->prepare("SELECT id, breach_count FROM breached_passwords 
-                               WHERE password_hash = ? AND hash_algorithm = ?");
-    $insertStmt = $conn->prepare("INSERT INTO breached_passwords 
-                                (password_hash, hash_algorithm, breach_count, first_seen) 
-                                VALUES (?, ?, ?, CURDATE())");
-    $updateStmt = $conn->prepare("UPDATE breached_passwords 
-                                SET breach_count = ?, last_updated = CURRENT_TIMESTAMP 
-                                WHERE id = ?");
+    
+    // Check if table exists
+    $tableCheck = $conn->query("SHOW TABLES LIKE 'breached_passwords'");
+    if ($tableCheck->num_rows == 0) {
+        die("Error: breached_passwords table does not exist in the database");
+    }
+
+    // Use UPSERT (INSERT ON DUPLICATE KEY UPDATE)
+    $upsertSql = "INSERT INTO breached_passwords 
+                 (password_hash, hash_algorithm, breach_count, first_seen, last_breach_date) 
+                 VALUES (?, ?, ?, CURDATE(), CURRENT_DATE)
+                 ON DUPLICATE KEY UPDATE 
+                 breach_count = breach_count + VALUES(breach_count),
+                 last_breach_date = VALUES(last_breach_date)";
+    
+    $upsertStmt = $conn->prepare($upsertSql);
+    if (!$upsertStmt) {
+        die("Error preparing upsert statement: " . $conn->error);
+    }
 
     $file = fopen($filePath, 'r');
+    if (!$file) {
+        die("Error opening file: $filePath");
+    }
+
     $imported = 0;
     $updated = 0;
     $skipped = 0;
@@ -102,27 +112,26 @@ function importBreachData($conn, $filePath) {
             continue;
         }
 
-        // Check if hash exists
-        $checkStmt->bind_param("ss", $hash, $algorithm);
-        $checkStmt->execute();
-        $result = $checkStmt->get_result();
+        // Ensure count is at least 1
+        $count = max(1, (int)$count);
 
-        if ($result->num_rows > 0) {
-            // Update existing
-            $row = $result->fetch_assoc();
-            $newCount = $row['breach_count'] + $count;
-            $updateStmt->bind_param("ii", $newCount, $row['id']);
-            $updateStmt->execute();
-            $updated++;
+        // Execute upsert
+        $upsertStmt->bind_param("ssi", $hash, $algorithm, $count);
+        if ($upsertStmt->execute()) {
+            if ($conn->affected_rows == 1) {
+                $imported++;
+            } else {
+                $updated++;
+            }
         } else {
-            // Insert new
-            $insertStmt->bind_param("ssi", $hash, $algorithm, $count);
-            $insertStmt->execute();
-            $imported++;
+            error_log("Failed to process hash: $hash - " . $upsertStmt->error);
+            $skipped++;
         }
     }
 
     fclose($file);
+    $upsertStmt->close();
+    
     return [
         'imported' => $imported,
         'updated' => $updated,
@@ -146,28 +155,54 @@ if (php_sapi_name() === 'cli') {
     );
 } else {
     // Web interface
+    echo '<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/theme.css">
+        <title>Import Breach Data</title>
+    </head>
+    <body>
+        <nav class="navbar">
+            <a href="/templates/admin.php" class="navbar-brand">RIASHE</a>
+        </nav>
+        
+        <div class="container" style="max-width: 800px; margin: 2rem auto;">';
+
     if (isset($_FILES['breachfile'])) {
         $tempFile = $_FILES['breachfile']['tmp_name'];
         $originalName = $_FILES['breachfile']['name'];
-        $result = importBreachData($conn, $tempFile);
         
-        echo "<h2>Import Results</h2>";
-        echo "<p>File: " . htmlspecialchars($originalName) . "</p>";
-        echo "<ul>";
-        echo "<li>Total lines: " . $result['total'] . "</li>";
-        echo "<li>New records: " . $result['imported'] . "</li>";
-        echo "<li>Updated records: " . $result['updated'] . "</li>";
-        echo "<li>Skipped lines: " . $result['skipped'] . "</li>";
-        echo "</ul>";
+        // Verify upload was successful
+        if ($_FILES['breachfile']['error'] !== UPLOAD_ERR_OK) {
+            echo '<div class="error">File upload failed with error code: ' . $_FILES['breachfile']['error'] . '</div>';
+        } else {
+            $result = importBreachData($conn, $tempFile);
+            
+            echo '<div class="card">
+                    <h2>Import Results</h2>
+                    <p>File: ' . htmlspecialchars($originalName) . '</p>
+                    <ul>
+                        <li>Total lines: ' . $result['total'] . '</li>
+                        <li>New records: ' . $result['imported'] . '</li>
+                        <li>Updated records: ' . $result['updated'] . '</li>
+                        <li>Skipped lines: ' . $result['skipped'] . '</li>
+                    </ul>
+                    <a href="import_breach_data.php" class="btn">Import Another</a>
+                </div>';
+        }
     } else {
-        echo '
-        <form method="post" enctype="multipart/form-data">
-            <h2>Upload Breach Data File</h2>
-            <input type="file" name="breachfile" required>
-            <p>Supported formats: .md5sum, .rti1, .rti2, .part, .torrent</p>
-            <button type="submit">Import</button>
-        </form>
-        ';
+        echo '<div class="card">
+                <h2>Upload Breach Data File</h2>
+                <form method="post" enctype="multipart/form-data">
+                    <input type="file" name="breachfile" required>
+                    <p>Supported formats: .md5sum, .rti1, .rti2, .part, .torrent</p>
+                    <button type="submit" class="btn">Import</button>
+                </form>
+            </div>';
     }
+
+    echo '</div></body></html>';
 }
 ?>

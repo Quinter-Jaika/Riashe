@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     
     // Find user in database
-    $stmt = $conn->prepare("SELECT id, username, password_hash, is_admin FROM users WHERE username = ?");
+   $stmt = $conn->prepare("SELECT id, username, bcrypt_password_hash, COALESCE(is_admin, 0) AS is_admin FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
         
-        if (password_verify($password, $user['password_hash'])) {
+        if (password_verify($password, $user['bcrypt_password_hash'])) {
             // Password is correct - now check with HIBP
             $hibpResult = checkHIBP($password);
             
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             recordPasswordCheck(
                 $conn, 
                 $user['id'], 
-                $user['password_hash'], 
+                $user['sha1_password_hash'], 
                 $hibpResult['is_compromised'], 
                 $hibpResult['breach_count']
             );
@@ -41,6 +41,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt = $conn->prepare("UPDATE users SET force_password_reset = TRUE WHERE id = ?");
                 $stmt->bind_param("i", $user['id']);
                 $stmt->execute();
+
+                    // Store the breach information in session
+                    $_SESSION['breach_info'] = [
+                        'sha1_breach_count' => $hibpResult['sha1_breach_count'],
+                        'check_date' => date('Y-m-d H:i:s')
+                    ];
                 
                 header("Location: ../templates/reset_password.php");
                 exit();
@@ -81,7 +87,7 @@ function checkHIBP($password) {
     // Parse response
     $result = [
         'is_compromised' => false,
-        'breach_count' => 0
+        'sha1_breach_count' => 0
     ];
     
     if ($response) {
@@ -90,7 +96,7 @@ function checkHIBP($password) {
             list($hash_suffix, $count) = explode(":", trim($line));
             if ($hash_suffix === $suffix) {
                 $result['is_compromised'] = true;
-                $result['breach_count'] = (int)$count;
+                $result['sha1_breach_count'] = (int)$count;
                 break;
             }
         }
@@ -99,17 +105,27 @@ function checkHIBP($password) {
     return $result;
 }
 
-function recordPasswordCheck($conn, $user_id, $password_hash, $is_compromised, $breach_count) {
+function recordPasswordCheck($conn, $user_id, $is_compromised, $breach_count) {
     $stmt = $conn->prepare("INSERT INTO password_security 
-        (user_id, password_hash, is_compromised, breach_count, check_date) 
-        VALUES (?, ?, ?, ?, NOW())");
-    $stmt->bind_param("isii", $user_id, $password_hash, $is_compromised, $breach_count);
+        (user_id, is_compromised, breach_count, check_date) 
+        VALUES (?, ?, ?, NOW())");
+    $stmt->bind_param("iii", $user_id, $is_compromised, $breach_count);
     $stmt->execute();
     $stmt->close();
-        if ($is_compromised) {
+    
+    if ($is_compromised) {
+        // Also update the user's breach count
+        $update_stmt = $conn->prepare("UPDATE users SET 
+            last_breach_check = NOW(),
+            sha1_breach_count = ?
+            WHERE id = ?");
+        $update_stmt->bind_param("ii", $breach_count, $user_id);
+        $update_stmt->execute();
+        $update_stmt->close();
+        
         notifyAdminAboutBreach($user_id, $breach_count);
     }
 }
 
-$conn->close();
+//$conn->close();
 ?>

@@ -7,24 +7,39 @@
     <title>User Registration</title>
 </head>
 <body>
-    <h2>User Registration</h2>
-    <form action="../process/process_registration.php" method="post">
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+    <nav class="navbar">
+       <a href="index.php" class="navbar-brand">RIASHE</a>
+        <div class="navbar-nav">
         </div>
-        
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+    </nav>
+    <div class="container">
+        <div class="login-container">
+            <div class="login-header">
+                 <h2>User Registration</h2>
+            </div>
+            <form action="../process/process_registration.php" method="post">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%">Register</button>
+
+                <div class="login-footer">
+                    <p>Already have an account? <a href="login.php">Login here</a></p>
+                </div>
+            </form>
         </div>
-        
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        
-        <button type="submit">Register</button>
-    </form>
+    </div>
 </body>
 </html>
