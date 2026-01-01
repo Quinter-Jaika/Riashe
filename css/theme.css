@@ -1,0 +1,491 @@
+/* Pastel Shego & Daria Theme */
+:root {
+  /* Shego-inspired (green/black) */
+  --shego-dark: #1a2e22;
+  --shego-primary: #88c9a1;
+  --shego-accent: #5bb982;
+  --shego-light: #e8f5eb;
+
+  /* Daria-inspired (purple/grays) */
+  --daria-dark: #2d1b33;
+  --daria-primary: #b399cc;
+  --daria-accent: #8a6da8;
+  --daria-light: #f0e6ff;
+  --daria-gray: #7a7a7a;
+
+  /* Theme selection */
+  --theme-dark: var(--shego-dark);
+  --theme-primary: var(--shego-primary);
+  --theme-accent: var(--shego-accent);
+  --theme-light: var(--shego-light);
+  --theme-text: #333;
+  --theme-bg: #f9f9f9;
+
+  /* Status colors */
+  --success: #a1d6b6;
+  --warning: #ffd166;
+  --danger: #ff9a8b;
+  --info: #8ac4d0;
+}
+
+/* Base Styles */
+body {
+  font-family: 'Courier New', Courier, monospace;
+  line-height: 1.6;
+  color: var(--theme-text);
+  background-color: var(--theme-bg);
+  margin: 0;
+  padding: 0;
+}
+
+/* Navigation */
+.navbar {
+  background-color: var(--theme-dark);
+  color: var(--theme-light);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+  font-family: 'Verdana', sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--theme-primary);
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  color: var(--theme-light);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  background-color: var(--theme-primary);
+  color: var(--theme-dark);
+}
+
+.nav-link.logout {
+  background-color: var(--danger);
+  color: white;
+}
+
+.nav-link.logout:hover {
+  background-color: #ff7a6b;
+}
+
+/* Cards & Containers */
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--theme-primary);
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+}
+
+/* Typography */
+h1, h2, h3 {
+  color: var(--theme-dark);
+  font-family: 'Verdana', sans-serif;
+}
+
+h1 {
+  border-bottom: 2px solid var(--theme-primary);
+  padding-bottom: 0.5rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  background: var(--theme-primary);
+  color: var(--theme-dark);
+  padding: 0.7rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background: var(--theme-accent);
+  transform: translateY(-2px);
+}
+
+.btn-warning {
+  background: var(--warning);
+  color: #333;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+/* Status Indicators */
+.breach-alert {
+  background-color: #ffebee;
+  border-left: 4px solid var(--danger);
+}
+
+.safe-status {
+  background-color: #e8f5e9;
+  border-left: 4px solid var(--success);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+th {
+  background-color: var(--theme-dark);
+  color: white;
+  padding: 1rem;
+  text-align: left;
+}
+
+td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+  background-color: var(--theme-light);
+}
+
+/* Forms */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
+  margin-bottom: 1rem;
+}
+
+/* Utility Classes */
+.text-muted {
+  color: var(--daria-gray);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.badge-danger {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
+
+.badge-warning {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+/* Theme Switch Toggle */
+.theme-toggle {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background: var(--theme-dark);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+/* Add these to your existing theme.css */
+
+/* Error/Success Messages */
+.error {
+    color: var(--danger);
+    background-color: #ffebee;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--danger);
+}
+
+.success {
+    color: var(--success);
+    background-color: #e8f5e9;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--success);
+}
+
+/* Stat Grid */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.stat-item, .stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: var(--daria-gray);
+    font-size: 0.9rem;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+/* Password Strength Meter */
+.password-strength {
+    margin: 0.5rem 0 1rem;
+}
+
+.strength-bar {
+    height: 5px;
+    background-color: #eee;
+    border-radius: 3px;
+    margin-top: 0.5rem;
+}
+
+.strength-bar > div {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+/* Back Link */
+.back-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--daria-accent);
+}
+
+/* Requirements List */
+.requirements {
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+
+.requirements ul {
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+/* Section Styles */
+.section-title {
+    color: var(--theme-dark);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--theme-primary);
+}
+
+.home-section {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+}
+
+/* Search Filter */
+.search-filter {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.search-filter input, 
+.search-filter select {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Action Buttons */
+.action-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+}
+
+.btn-notify {
+    background-color: var(--info);
+    color: white;
+}
+
+.btn-force-reset {
+    background-color: var(--warning);
+    color: #333;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.pagination a, 
+.pagination span {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    background-color: var(--theme-primary);
+    color: white;
+}
+
+.pagination .active {
+    background-color: var(--theme-dark);
+    color: white;
+    border-color: var(--theme-dark);
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+}
+       
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+        
+.login-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--daria-gray);
+}
+.lore-section {
+   background-color: var(--daria-dark);
+   color: var(--theme-light);
+   padding: 2rem;
+   border-radius: 8px;
+   margin-bottom: 2rem;
+   box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+   border-left: 4px solid var(--daria-accent);
+}
+        
+.lore-section h2 {
+   color: var(--theme-primary) !important;
+   border-bottom: 2px solid var(--daria-accent);
+   padding-bottom: 0.5rem;
+   margin-top: 0;
+}
+        
+.lore-section ul {
+   padding-left: 1.5rem;
+}
+        
+.lore-section li {
+   margin-bottom: 0.5rem;
+}
+
+.security-alert {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.security-alert p {
+    margin: 5px 0;
+}
+
+.security-fact {
+    font-weight: bold;
+}
+/* Breach Tools Styling */
+.alert {
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+.form-inline .form-control {
+    width: 100px;
+    display: inline-block;
+}
+
+.text-muted {
+    color: #6c757d;
+    font-size: 0.9em;
+}
